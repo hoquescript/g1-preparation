@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G1 Practice Test</title>
+<style>
+  :root {
+    --bg: #f4f6fa; --card: #ffffff; --text: #1d2330; --muted: #5d6677; --border: #dde2ea;
+    --accent: #1f6feb; --accent-text: #ffffff; --good: #1a7f37; --good-bg: #e6f4ea;
+    --bad: #c62828; --bad-bg: #fdecea; --chip: #eef1f6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #11141a; --card: #1a1f27; --text: #e6e9ef; --muted: #9aa3b2; --border: #2c333f;
+      --accent: #4c8dff; --accent-text: #0b0e13; --good: #4cc26a; --good-bg: #16301f;
+      --bad: #ff6b6b; --bad-bg: #3a1c1c; --chip: #252b35;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  h2 { font-size: 1.15rem; margin: 0 0 12px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .row > label { flex: 1 1 140px; }
+  label { display: block; font-weight: 600; font-size: .9rem; }
+  input[type=number] {
+    width: 100%; margin-top: 6px; padding: 10px 12px; font: inherit; color: var(--text);
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  }
+  .modes { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .modes label { font-weight: 500; display: flex; align-items: center; gap: 6px; padding: 8px 12px;
+    border: 1px solid var(--border); border-radius: 8px; cursor: pointer; }
+  .check { display: flex; align-items: center; gap: 8px; font-weight: 500; margin-top: 14px; }
+  .hint { color: var(--muted); font-size: .85rem; font-weight: 400; margin-top: 4px; }
+  button {
+    font: inherit; font-weight: 600; padding: 11px 18px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+  button:disabled { opacity: .5; cursor: default; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .error { color: var(--bad); margin-top: 10px; font-size: .9rem; }
+  .bar { height: 6px; background: var(--chip); border-radius: 3px; overflow: hidden; margin: 8px 0 16px; }
+  .bar > div { height: 100%; background: var(--accent); transition: width .2s; }
+  .meta { display: flex; justify-content: space-between; color: var(--muted); font-size: .9rem; }
+  .question { font-size: 1.15rem; font-weight: 600; margin: 0 0 16px; }
+  .opt {
+    display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; font-weight: 500;
+    margin-bottom: 10px; padding: 12px 14px;
+  }
+  .opt .key { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--chip);
+    display: grid; place-items: center; font-size: .85rem; font-weight: 700; }
+  .opt.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .opt.correct { border-color: var(--good); background: var(--good-bg); }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .feedback { border-radius: 8px; padding: 12px 14px; margin-top: 6px; font-size: .95rem; }
+  .feedback.good { background: var(--good-bg); }
+  .feedback.bad { background: var(--bad-bg); }
+  .feedback b { display: block; margin-bottom: 4px; }
+  .score { font-size: 2.4rem; font-weight: 800; margin: 0; }
+  .pass { color: var(--good); font-weight: 700; }
+  .fail { color: var(--bad); font-weight: 700; }
+  .review-item { border-top: 1px solid var(--border); padding: 14px 0; }
+  .review-item:first-child { border-top: 0; padding-top: 0; }
+  .review-item .q { font-weight: 600; margin-bottom: 6px; }
+  .tag { display: inline-block; font-size: .75rem; font-weight: 700; padding: 1px 8px; border-radius: 10px;
+    background: var(--chip); color: var(--muted); margin-right: 6px; }
+  .ans-bad { color: var(--bad); }
+  .ans-good { color: var(--good); }
+  .kbd { color: var(--muted); font-size: .8rem; margin-top: 10px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>G1 Practice Test</h1>
+  <p class="sub">Ontario G1 knowledge test practice: multiple choice, 4 options, 80% to pass.</p>
+
+  <!-- Setup -->
+  <section id="setup">
+    <div class="card">
+      <h2>Question range</h2>
+      <div class="row">
+        <label>From question <input type="number" id="from" min="1" value="1"></label>
+        <label>To question <input type="number" id="to" min="1" value="70"></label>
+        <label>Number of questions <input type="number" id="count" min="1" value="20"></label>
+      </div>
+      <div class="hint" id="range-info"></div>
+
+      <label style="margin-top:16px">Mode</label>
+      <div class="modes">
+        <label><input type="radio" name="mode" value="practice" checked> Practice: see the answer after each question</label>
+        <label><input type="radio" name="mode" value="exam"> Exam: answers shown only at the end</label>
+      </div>
+
+      <label class="check"><input type="checkbox" id="weak"> Focus on questions I've got wrong before</label>
+      <div class="hint" id="weak-info"></div>
+
+      <div class="actions">
+        <button class="primary" id="start">Start test</button>
+        <button id="reset-stats">Reset my history</button>
+      </div>
+      <div class="error" id="setup-error"></div>
+    </div>
+  </section>
+
+  <!-- Quiz -->
+  <section id="quiz" hidden>
+    <div class="card">
+      <div class="meta"><span id="progress"></span><span id="live-score"></span></div>
+      <div class="bar"><div id="bar"></div></div>
+      <p class="question" id="question"></p>
+      <div id="options"></div>
+      <div id="feedback"></div>
+      <div class="actions">
+        <button class="primary" id="next" disabled>Next</button>
+        <button id="quit">End test</button>
+      </div>
+      <div class="kbd">Keyboard: 1–4 or A–D to answer, Enter for next.</div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section id="results" hidden>
+    <div class="card">
+      <p class="score" id="score"></p>
+      <p id="verdict"></p>
+      <div class="actions">
+        <button class="primary" id="retry-wrong">Retry the ones I missed</button>
+        <button id="again">New test, same range</button>
+        <button id="change">Change range</button>
+      </div>
+    </div>
+    <div class="card" id="review-card">
+      <h2 id="review-title"></h2>
+      <div id="review"></div>
+    </div>
+  </section>
+</main>
+
+<script src="question_bank.js"></script>
+<script>
+const PASS = 0.8;
+const KEYS = ["A", "B", "C", "D"];
+const $ = (id) => document.getElementById(id);
+
+// --- per-browser history (convenience only) -------------------------------------------
+const store = {
+  get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } },
+  set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} },
+};
+let stats = store.get("g1-stats", {}); // { [n]: { right, wrong } }
+
+function record(n, ok) {
+  const s = stats[n] || { right: 0, wrong: 0 };
+  ok ? s.right++ : s.wrong++;
+  stats[n] = s;
+  store.set("g1-stats", stats);
+}
+const missedBefore = (n) => (stats[n]?.wrong || 0) > 0;
+
+// --- helpers -------------------------------------------------------------------------
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function esc(s) {
+  return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+const byNumber = Object.fromEntries(QUESTIONS.map((q) => [q.n, q]));
+const MAX = QUESTIONS.length;
+
+// --- setup ---------------------------------------------------------------------------
+const saved = store.get("g1-settings", {});
+$("from").value = saved.from ?? 1;
+$("to").value = saved.to ?? Math.min(70, MAX);
+$("count").value = saved.count ?? 20;
+$("from").max = $("to").max = MAX;
+if (saved.mode) document.querySelector(`input[name=mode][value=${saved.mode}]`).checked = true;
+
+function readRange() {
+  const from = Math.max(1, Math.min(MAX, parseInt($("from").value) || 1));
+  const to = Math.max(1, Math.min(MAX, parseInt($("to").value) || MAX));
+  return [Math.min(from, to), Math.max(from, to)];
+}
+function pool() {
+  const [from, to] = readRange();
+  let list = QUESTIONS.filter((q) => q.n >= from && q.n <= to);
+  if ($("weak").checked) list = list.filter((q) => missedBefore(q.n));
+  return list;
+}
+function updateInfo() {
+  const [from, to] = readRange();
+  const all = QUESTIONS.filter((q) => q.n >= from && q.n <= to);
+  const missed = all.filter((q) => missedBefore(q.n)).length;
+  const seen = all.filter((q) => stats[q.n]).length;
+  $("range-info").textContent = `${all.length} questions in range ${from}–${to} (of ${MAX} total).`;
+  $("weak-info").textContent = `You've answered ${seen} of these before and got ${missed} wrong at least once.`;
+}
+["from", "to", "weak"].forEach((id) => $(id).addEventListener("input", updateInfo));
+updateInfo();
+
+$("reset-stats").onclick = () => {
+  if (!confirm("Clear your answer history on this browser?")) return;
+  stats = {};
+  store.set("g1-stats", stats);
+  updateInfo();
+};
+
+// --- quiz ----------------------------------------------------------------------------
+let test = null; // { mode, items: [{ q, options, pick }], idx }
+
+function startTest(questions) {
+  const mode = document.querySelector("input[name=mode]:checked").value;
+  test = {
+    mode,
+    idx: 0,
+    items: shuffle(questions).map((q) => ({ q, options: shuffle([q.a, ...q.w]), pick: null })),
+  };
+  show("quiz");
+  renderQuestion();
+}
+
+$("start").onclick = () => {
+  const [from, to] = readRange();
+  const list = pool();
+  const count = Math.max(1, parseInt($("count").value) || 20);
+  $("setup-error").textContent = "";
+  if (!list.length) {
+    $("setup-error").textContent = $("weak").checked
+      ? "You haven't missed any questions in this range yet. Untick the focus option."
+      : "No questions in that range.";
+    return;
+  }
+  store.set("g1-settings", { from, to, count, mode: document.querySelector("input[name=mode]:checked").value });
+  startTest(shuffle(list).slice(0, count));
+};
+
+function renderQuestion() {
+  const item = test.items[test.idx];
+  const total = test.items.length;
+  $("progress").textContent = `Question ${test.idx + 1} of ${total}`;
+  $("bar").style.width = `${(test.idx / total) * 100}%`;
+  const answered = test.items.filter((i) => i.pick !== null);
+  $("live-score").textContent = test.mode === "practice" && answered.length
+    ? `${answered.filter((i) => i.pick === i.q.a).length}/${answered.length} correct` : "";
+  $("question").textContent = item.q.q;
+  $("options").innerHTML = item.options.map((o, i) =>
+    `<button class="opt" data-i="${i}"><span class="key">${KEYS[i]}</span><span>${esc(o)}</span></button>`
+  ).join("");
+  $("options").querySelectorAll(".opt").forEach((b) => (b.onclick = () => choose(+b.dataset.i)));
+  $("feedback").innerHTML = "";
+  $("next").disabled = true;
+  $("next").textContent = test.idx === total - 1 ? "Finish" : "Next";
+}
+
+function choose(i) {
+  const item = test.items[test.idx];
+  if (test.mode === "practice" && item.pick !== null) return; // locked once answered
+  item.pick = item.options[i];
+  const buttons = $("options").querySelectorAll(".opt");
+  buttons.forEach((b) => b.classList.toggle("selected", +b.dataset.i === i));
+  $("next").disabled = false;
+
+  if (test.mode === "practice") {
+    const ok = item.pick === item.q.a;
+    record(item.q.n, ok);
+    buttons.forEach((b) => {
+      const text = item.options[+b.dataset.i];
+      b.classList.remove("selected");
+      if (text === item.q.a) b.classList.add("correct");
+      else if (+b.dataset.i === i) b.classList.add("wrong");
+    });
+    $("feedback").innerHTML = `<div class="feedback ${ok ? "good" : "bad"}">
+      <b>${ok ? "Correct" : "Not quite"}</b>${esc(item.q.e)}
+      <div class="hint">Question #${item.q.n} in your study list</div></div>`;
+  }
+}
+
+function next() {
+  if ($("next").disabled) return;
+  if (test.mode === "exam") record(test.items[test.idx].q.n, test.items[test.idx].pick === test.items[test.idx].q.a);
+  if (test.idx < test.items.length - 1) {
+    test.idx++;
+    renderQuestion();
+  } else {
+    finish();
+  }
+}
+$("next").onclick = next;
+
+$("quit").onclick = () => {
+  if (confirm("End the test now? Unanswered questions won't be counted.")) {
+    test.items = test.items.filter((i) => i.pick !== null);
+    if (test.items.length) finish(); else show("setup");
+  }
+};
+
+document.addEventListener("keydown", (e) => {
+  if ($("quiz").hidden || e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key.toUpperCase();
+  const i = "1234".includes(k) ? +k - 1 : KEYS.indexOf(k);
+  if (i >= 0 && i < 4) choose(i);
+  else if (e.key === "Enter") next();
+});
+
+// --- results -------------------------------------------------------------------------
+function finish() {
+  const total = test.items.length;
+  const wrong = test.items.filter((i) => i.pick !== i.q.a);
+  const right = total - wrong.length;
+  const pct = right / total;
+  $("score").textContent = `${right} / ${total}  (${Math.round(pct * 100)}%)`;
+  $("verdict").innerHTML = pct >= PASS
+    ? `<span class="pass">Pass</span>: you need ${Math.ceil(PASS * total)} of ${total} (80%) to pass.`
+    : `<span class="fail">Not yet</span>: you need ${Math.ceil(PASS * total)} of ${total} (80%) to pass.`;
+  $("retry-wrong").hidden = !wrong.length;
+  $("review-title").textContent = wrong.length ? `Review: ${wrong.length} missed` : "Perfect score, nothing to review";
+  $("review").innerHTML = wrong.map((i) => `
+    <div class="review-item">
+      <div class="q"><span class="tag">#${i.q.n}</span>${esc(i.q.q)}</div>
+      <div class="ans-bad">Your answer: ${esc(i.pick)}</div>
+      <div class="ans-good">Correct: ${esc(i.q.a)}</div>
+      ${i.q.e !== i.q.a ? `<div class="hint">${esc(i.q.e)}</div>` : ""}
+    </div>`).join("");
+  test.wrong = wrong.map((i) => i.q);
+  show("results");
+}
+
+$("retry-wrong").onclick = () => startTest(test.wrong);
+$("again").onclick = () => $("start").click();
+$("change").onclick = () => { updateInfo(); show("setup"); };
+
+function show(id) {
+  ["setup", "quiz", "results"].forEach((s) => ($(s).hidden = s !== id));
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+__pycache__/
+*.py[oc]
+.venv/
+.DS_Store
+run.log
+screenshots/
+g1_history.db
