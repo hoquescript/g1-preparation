@@ -151,18 +151,27 @@ const PASS = 0.8;
 const KEYS = ["A", "B", "C", "D"];
 const $ = (id) => document.getElementById(id);
 
-// --- per-browser history (convenience only) -------------------------------------------
+// --- settings stay in the browser; answer history lives in SQLite via server.py --------
 const store = {
   get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } },
   set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} },
 };
-let stats = store.get("g1-stats", {}); // { [n]: { right, wrong } }
+let stats = {}; // { [n]: { right, wrong } }, loaded from /api/stats
+const NO_SERVER = "History isn't being saved: start the quiz with `python3 server.py` and open http://127.0.0.1:8000/";
 
-function record(n, ok) {
-  const s = stats[n] || { right: 0, wrong: 0 };
+async function api(path, body) {
+  const res = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  if (!res.ok) throw new Error(`${path}: ${res.status}`);
+  return res.json();
+}
+
+function record(item) {
+  const ok = item.pick === item.q.a;
+  const s = stats[item.q.n] || { right: 0, wrong: 0 };
   ok ? s.right++ : s.wrong++;
-  stats[n] = s;
-  store.set("g1-stats", stats);
+  stats[item.q.n] = s;
+  api("/api/answer", { n: item.q.n, picked: item.pick, answer: item.q.a, mode: test.mode })
+    .catch(() => ($("setup-error").textContent = NO_SERVER));
 }
 const missedBefore = (n) => (stats[n]?.wrong || 0) > 0;
 
@@ -210,12 +219,19 @@ function updateInfo() {
 }
 ["from", "to", "weak"].forEach((id) => $(id).addEventListener("input", updateInfo));
 updateInfo();
+api("/api/stats")
+  .then((s) => { stats = s; updateInfo(); })
+  .catch(() => ($("setup-error").textContent = NO_SERVER));
 
-$("reset-stats").onclick = () => {
-  if (!confirm("Clear your answer history on this browser?")) return;
-  stats = {};
-  store.set("g1-stats", stats);
-  updateInfo();
+$("reset-stats").onclick = async () => {
+  if (!confirm("Clear your saved answer history?")) return;
+  try {
+    await api("/api/reset", {});
+    stats = {};
+    updateInfo();
+  } catch {
+    $("setup-error").textContent = NO_SERVER;
+  }
 };
 
 // --- quiz ----------------------------------------------------------------------------
@@ -275,7 +291,7 @@ function choose(i) {
 
   if (test.mode === "practice") {
     const ok = item.pick === item.q.a;
-    record(item.q.n, ok);
+    record(item);
     buttons.forEach((b) => {
       const text = item.options[+b.dataset.i];
       b.classList.remove("selected");
@@ -290,7 +306,7 @@ function choose(i) {
 
 function next() {
   if ($("next").disabled) return;
-  if (test.mode === "exam") record(test.items[test.idx].q.n, test.items[test.idx].pick === test.items[test.idx].q.a);
+  if (test.mode === "exam") record(test.items[test.idx]);
   if (test.idx < test.items.length - 1) {
     test.idx++;
     renderQuestion();
