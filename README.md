@@ -4,7 +4,17 @@ Ontario G1 knowledge test practice quiz: 203 multiple-choice questions, practice
 
 ## Use
 
-Open `quiz.html` in a browser.
+```
+python3 server.py        # then open http://127.0.0.1:8000/
+```
+
+Every answer is saved to `g1_history.db` (SQLite, table `attempts`: question, picked, answer,
+is_correct, mode, answered_at). "Focus on questions I've got wrong before" reads from it.
+See your most-missed questions with:
+
+```
+sqlite3 g1_history.db "SELECT question, COUNT(*) FROM attempts WHERE NOT is_correct GROUP BY question ORDER BY 2 DESC"
+```
 
 ## How the question bank is built
 
