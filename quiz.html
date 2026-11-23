@@ -226,7 +226,12 @@ function startTest(questions) {
   test = {
     mode,
     idx: 0,
-    items: shuffle(questions).map((q) => ({ q, options: shuffle([q.a, ...q.w]), pick: null })),
+    items: shuffle(questions).map((q) => ({
+      q,
+      text: shuffle([q.q, ...(q.v || [])])[0], // original or one of its paraphrases
+      options: shuffle([q.a, ...q.w]),
+      pick: null,
+    })),
   };
   show("quiz");
   renderQuestion();
@@ -255,7 +260,7 @@ function renderQuestion() {
   const answered = test.items.filter((i) => i.pick !== null);
   $("live-score").textContent = test.mode === "practice" && answered.length
     ? `${answered.filter((i) => i.pick === i.q.a).length}/${answered.length} correct` : "";
-  $("question").textContent = item.q.q;
+  $("question").textContent = item.text;
   $("options").innerHTML = item.options.map((o, i) =>
     `<button class="opt" data-i="${i}"><span class="key">${KEYS[i]}</span><span>${esc(o)}</span></button>`
   ).join("");
@@ -329,7 +334,7 @@ function finish() {
   $("review-title").textContent = wrong.length ? `Review: ${wrong.length} missed` : "Perfect score, nothing to review";
   $("review").innerHTML = wrong.map((i) => `
     <div class="review-item">
-      <div class="q"><span class="tag">#${i.q.n}</span>${esc(i.q.q)}</div>
+      <div class="q"><span class="tag">#${i.q.n}</span>${esc(i.text)}</div>
       <div class="ans-bad">Your answer: ${esc(i.pick)}</div>
       <div class="ans-good">Correct: ${esc(i.q.a)}</div>
       ${i.q.e !== i.q.a ? `<div class="hint">${esc(i.q.e)}</div>` : ""}
