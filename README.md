@@ -12,5 +12,7 @@ Open `quiz.html` in a browser.
 2. `ocr.py` extracts questions and answers into `questions.csv` (macOS Vision).
 3. `options.py` holds the correct answer wording and three wrong options per question.
 4. `paraphrases.py` holds three rewordings per question; each test shows the original or one of them at random,
-   so you learn the rule rather than the wording. New questions without paraphrases use the original only.
-5. `python3 build_bank.py` merges them into `question_bank.js`, which `quiz.html` loads.
+   so you learn the rule rather than the wording. "Which is NOT..." questions also get positive versions with
+   their own answers. New questions without paraphrases use the original only.
+5. `duplicates.py` groups near-duplicate questions; a test includes at most one question from each group.
+6. `python3 build_bank.py` merges them into `question_bank.js`, which `quiz.html` loads.

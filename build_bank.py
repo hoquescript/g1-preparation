@@ -1,16 +1,28 @@
 #!/usr/bin/env python3
-"""Merge questions.csv with options.py and paraphrases.py into question_bank.js for quiz.html."""
+"""Merge questions.csv with options.py, paraphrases.py and duplicates.py into question_bank.js."""
 import csv
 import json
 import sys
 
+from duplicates import DUPLICATES
 from options import OPTIONS
 from paraphrases import PARAPHRASES
+
+
+def distinct_choices(correct, wrong):
+    return len(wrong) == 3 and len({c.lower() for c in [correct, *wrong]}) == 4
 
 
 def main():
     with open("questions.csv", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
+
+    group = {}
+    for members in DUPLICATES:
+        for n in members:
+            if n in group:
+                sys.exit(f"{n}: in more than one duplicate group")
+            group[n] = members[0]
 
     bank, errors, unparaphrased = [], [], []
     for row in rows:
@@ -20,13 +32,18 @@ def main():
             continue
         correct, wrong = OPTIONS[n]
         correct = correct or row["answer"]
-        choices = [correct, *wrong]
-        if len(wrong) != 3 or len({c.lower() for c in choices}) != 4:
+        if not distinct_choices(correct, wrong):
             errors.append(f"{n}: need 3 distinct wrong options different from the answer")
         variants = PARAPHRASES.get(n, [])
         if not variants:
             unparaphrased.append(n)
-        bank.append({"n": n, "q": row["question"], "v": variants, "a": correct, "w": wrong, "e": row["answer"]})
+        for v in variants:
+            if isinstance(v, dict) and (set(v) != {"q", "a", "w", "e"} or not distinct_choices(v["a"], v["w"])):
+                errors.append(f"{n}: positive version needs q, a, e and 3 distinct wrong options")
+        entry = {"n": n, "q": row["question"], "v": variants, "a": correct, "w": wrong, "e": row["answer"]}
+        if n in group:
+            entry["g"] = group[n]
+        bank.append(entry)
 
     if errors:
         sys.exit("\n".join(errors))

@@ -1,8 +1,9 @@
 """Alternative wordings for each question in questions.csv.
 
-PARAPHRASES[n] = three rewordings of question n. Each keeps the meaning of the original, so the
-correct and wrong options in options.py still apply. quiz.html shows the original or one of these
-at random.
+PARAPHRASES[n] = rewordings of question n. A string keeps the meaning of the original, so the
+correct and wrong options in options.py still apply. A dict is a positive version of a negative
+("which is NOT ...") question and carries its own "q", "a", "w" (3 wrong options) and "e"
+(explanation). quiz.html shows the original or one of these at random.
 """
 
 PARAPHRASES = {
@@ -132,7 +133,13 @@ PARAPHRASES = {
     124: ["When no speed limit is posted, what is the maximum speed in a city, town or village?", "What is the speed limit in a village where no signs show the limit?", "If there are no speed signs in a town, the maximum speed is"],
     125: ["What is the purpose of signalling when you turn?", "Why are you required to signal before turning?", "Turn signals are used for what reason?"],
     126: ["How old must you be, with a valid Ontario licence, to drive in Ontario?", "What is the minimum age to drive in Ontario with a valid Ontario driver's licence?", "Ontario residents must be at least how old to drive with a valid Ontario licence?"],
-    127: ["Which of these does NOT cause skids?", "Which of the following is not a cause of skidding?", "Skids are caused by many things. Which of these is not one of them?"],
+    127: ["Which of these does NOT cause skids?", "Which of the following is not a cause of skidding?",
+          {"q": "Which of the following can cause a skid?", "a": "Turning too sharply",
+           "w": ["Driving too slowly", "Accelerating gently", "Keeping a two-second following distance"],
+           "e": "Skids are caused by driving too fast, braking too hard or turning too sharply. Driving too slowly does not cause skids."},
+          {"q": "Which of these driving habits can make your vehicle skid?", "a": "Braking too hard",
+           "w": ["Driving too slowly", "Steering smoothly", "Slowing down before curves"],
+           "e": "Skids are caused by driving too fast, braking too hard or turning too sharply. Driving too slowly does not cause skids."}],
     128: ["During which hours may a G1 driver not drive?", "With a G1 licence, you are not allowed to drive between", "What time restriction applies to G1 drivers?"],
     129: ["You are in a collision with no injuries and damage of $2000 or less. What should you do?", "After a minor collision where damage is $2000 or less and nobody is hurt, you should", "What is required after a collision when damage does not exceed $2000 and no one is injured?"],
     130: ["After a collision with injuries or more than $2000 in damage, when must you report it to the police?", "How soon must a collision involving injury or over $2000 damage be reported to police?", "A collision caused injuries or over $2000 in damage. When do you report it to the nearest police?"],
@@ -187,7 +194,13 @@ PARAPHRASES = {
     179: ["What causes hydroplaning?", "Hydroplaning happens because of", "Hydroplaning can make your car skid. What causes it?"],
     180: ["How many people must be in a vehicle to use a High Occupancy Vehicle lane on a provincial highway?", "HOV lanes on provincial highways are for vehicles carrying", "What is the minimum number of occupants required to drive in an HOV lane?"],
     181: ["What should you do if the fog becomes very dense while you are driving?", "The fog you are driving in gets so thick you can barely see. What is the safest action?", "If fog becomes extremely heavy, you should"],
-    182: ["Which of these statements about driving in the rain is false?", "Which statement about wet-weather driving is NOT true?", "Identify the false statement about driving in rain."],
+    182: ["Which of these statements about driving in the rain is false?", "Which statement about wet-weather driving is NOT true?",
+          {"q": "Which statement about driving in the rain is true?", "a": "Rain increases stopping distance",
+           "w": ["Rain can increase your braking ability", "Roads are least slippery when rain first begins", "Rain improves visibility"],
+           "e": "Rain reduces visibility and increases stopping distance, and roads are most slippery when rain first begins. Rain never improves your braking."},
+          {"q": "Which of these is true about wet-weather driving?", "a": "Rain reduces visibility",
+           "w": ["Rain can increase your braking ability", "Rain shortens stopping distance", "Roads are least slippery when rain first begins"],
+           "e": "Rain reduces visibility and increases stopping distance, and roads are most slippery when rain first begins. Rain never improves your braking."}],
     183: ["How long must a new driver hold a G1 licence before taking the G1 road test?", "What is the minimum time you must have a G1 licence before your road test?", "Before you can take the G1 road test, you must hold your G1 licence for"],
     184: ["Which standards must your vehicle's tires meet?", "What are the safety requirements for vehicle tires?", "Your tires must meet which conditions to be safe and legal?"],
     185: ["Black ice is best described as", "Which description matches black ice?", "The term black ice refers to"],

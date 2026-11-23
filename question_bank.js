@@ -46,7 +46,8 @@ const QUESTIONS = [
    "Parking lights only",
    "Emergency flashers only"
   ],
-  "e": "Low beam headlights"
+  "e": "Low beam headlights",
+  "g": 3
  },
  {
   "n": 4,
@@ -94,7 +95,8 @@ const QUESTIONS = [
    "$1500",
    "$5000"
   ],
-  "e": "$2000"
+  "e": "$2000",
+  "g": 6
  },
  {
   "n": 7,
@@ -110,7 +112,8 @@ const QUESTIONS = [
    "120 metres",
    "150 metres"
   ],
-  "e": "Use your low-beam headlights within 150 metres of an oncoming vehicle or when following a vehicle within 60 metres."
+  "e": "Use your low-beam headlights within 150 metres of an oncoming vehicle or when following a vehicle within 60 metres.",
+  "g": 7
  },
  {
   "n": 8,
@@ -126,7 +129,8 @@ const QUESTIONS = [
    "Firearms",
    "Luggage"
   ],
-  "e": "Persons (Passenger)"
+  "e": "Persons (Passenger)",
+  "g": 8
  },
  {
   "n": 9,
@@ -190,7 +194,8 @@ const QUESTIONS = [
    "Within 48 hours",
    "Within 7 days"
   ],
-  "e": "Immediately"
+  "e": "Immediately",
+  "g": 12
  },
  {
   "n": 13,
@@ -222,7 +227,8 @@ const QUESTIONS = [
    "60 km/h",
    "70 km/h"
   ],
-  "e": "50 km/h"
+  "e": "50 km/h",
+  "g": 14
  },
  {
   "n": 15,
@@ -238,7 +244,8 @@ const QUESTIONS = [
    "Speed up to clear the intersection",
    "Stop and proceed only when signalled by police"
   ],
-  "e": "Slow down and proceed with caution"
+  "e": "Slow down and proceed with caution",
+  "g": 15
  },
  {
   "n": 16,
@@ -286,7 +293,8 @@ const QUESTIONS = [
    "Other drivers will be blinded",
    "It drains your battery"
   ],
-  "e": "You cannot stop within the distance that you can see"
+  "e": "You cannot stop within the distance that you can see",
+  "g": 18
  },
  {
   "n": 19,
@@ -414,7 +422,8 @@ const QUESTIONS = [
    "Speed up to merge ahead of traffic",
    "Proceed without slowing down"
   ],
-  "e": "Slow down, stop if necessary, and yield right-of-way"
+  "e": "Slow down, stop if necessary, and yield right-of-way",
+  "g": 26
  },
  {
   "n": 27,
@@ -478,7 +487,8 @@ const QUESTIONS = [
    "Sound your horn and pass slowly",
    "Stop 10 m behind and wait for the streetcar to move"
   ],
-  "e": "Stop 2m (6 ft.) behind the rearmost door where passengers are getting on or off, and proceed only when it is safe to do so"
+  "e": "Stop 2m (6 ft.) behind the rearmost door where passengers are getting on or off, and proceed only when it is safe to do so",
+  "g": 30
  },
  {
   "n": 31,
@@ -574,7 +584,8 @@ const QUESTIONS = [
    "Speed up and turn the wheel quickly back",
    "Turn the wheel sharply and brake at the same time"
   ],
-  "e": "If your wheels go off the pavement, Don't panic. Grip the steering wheel firmly. Take your foot off the gas pedal to slow down. Avoid heavy braking. When the vehicle is under control, steer toward the pavement."
+  "e": "If your wheels go off the pavement, Don't panic. Grip the steering wheel firmly. Take your foot off the gas pedal to slow down. Avoid heavy braking. When the vehicle is under control, steer toward the pavement.",
+  "g": 36
  },
  {
   "n": 37,
@@ -622,7 +633,8 @@ const QUESTIONS = [
    "7 days",
    "1 year"
   ],
-  "e": "90 days"
+  "e": "90 days",
+  "g": 39
  },
  {
   "n": 40,
@@ -638,7 +650,8 @@ const QUESTIONS = [
    "To a family member",
    "To someone who holds a valid licence"
   ],
-  "e": "Never"
+  "e": "Never",
+  "g": 40
  },
  {
   "n": 41,
@@ -702,7 +715,8 @@ const QUESTIONS = [
    "Signal and turn without stopping if the way is clear",
    "Stop and wait for the green light, since red means no turns"
   ],
-  "e": "Stop, signal, make the turn so as not to interfere with other traffic, including pedestrians"
+  "e": "Stop, signal, make the turn so as not to interfere with other traffic, including pedestrians",
+  "g": 44
  },
  {
   "n": 45,
@@ -750,7 +764,8 @@ const QUESTIONS = [
    "Stop and wait for the light to turn green",
    "The light is about to turn green"
   ],
-  "e": "Stop. Proceed only when it is safe to do so"
+  "e": "Stop. Proceed only when it is safe to do so",
+  "g": 47
  },
  {
   "n": 48,
@@ -782,7 +797,8 @@ const QUESTIONS = [
    "Ambulance",
    "Tow truck"
   ],
-  "e": "Snow removal equipment"
+  "e": "Snow removal equipment",
+  "g": 49
  },
  {
   "n": 50,
@@ -942,7 +958,8 @@ const QUESTIONS = [
    "Stop on the shoulder and wait for a gap",
    "Cross several lanes at the last moment"
   ],
-  "e": "Give yourself plenty of time to move over to the lane closest to the exit. Slow down smoothly to the posted speed limit or to the prevailing speed on the exit ramp. Signal and maintain your speed until you are off the ramp."
+  "e": "Give yourself plenty of time to move over to the lane closest to the exit. Slow down smoothly to the posted speed limit or to the prevailing speed on the exit ramp. Signal and maintain your speed until you are off the ramp.",
+  "g": 59
  },
  {
   "n": 60,
@@ -1022,7 +1039,8 @@ const QUESTIONS = [
    "It is only required while taking the road test",
    "To make eye contact with the drivers behind you"
   ],
-  "e": "There will always be a blind spot in your mirrors, no matter how you adjust them"
+  "e": "There will always be a blind spot in your mirrors, no matter how you adjust them",
+  "g": 64
  },
  {
   "n": 65,
@@ -1054,7 +1072,8 @@ const QUESTIONS = [
    "1 year",
    "7 days"
   ],
-  "e": "90 days"
+  "e": "90 days",
+  "g": 39
  },
  {
   "n": 67,
@@ -1118,7 +1137,8 @@ const QUESTIONS = [
    "Only when damage is over $5000",
    "Only when a vehicle cannot be driven"
   ],
-  "e": "The damage is over $2000 or if someone has been hurt or killed"
+  "e": "The damage is over $2000 or if someone has been hurt or killed",
+  "g": 6
  },
  {
   "n": 71,
@@ -1278,7 +1298,8 @@ const QUESTIONS = [
    "Pass only in emergencies",
    "Pass only on the right"
   ],
-  "e": "Pass if the way is clear"
+  "e": "Pass if the way is clear",
+  "g": 80
  },
  {
   "n": 81,
@@ -1342,7 +1363,8 @@ const QUESTIONS = [
    "You must turn left",
    "Traffic flows in your direction only"
   ],
-  "e": "It is unsafe to overtake and pass"
+  "e": "It is unsafe to overtake and pass",
+  "g": 84
  },
  {
   "n": 85,
@@ -1374,7 +1396,8 @@ const QUESTIONS = [
    "Accelerate to regain traction",
    "Turn off the engine immediately"
   ],
-  "e": "Grip the steering wheel firmly, take your foot off the gas pedal to slow down, and avoid heavy braking. When the vehicle is under control, steer back onto the road."
+  "e": "Grip the steering wheel firmly, take your foot off the gas pedal to slow down, and avoid heavy braking. When the vehicle is under control, steer back onto the road.",
+  "g": 36
  },
  {
   "n": 87,
@@ -1454,7 +1477,8 @@ const QUESTIONS = [
    "Stop in your lane and wait for the whiteout to clear",
    "Speed up to get through the whiteout area as fast as possible"
   ],
-  "e": "Turn on emergency flashers and pull off the road completely into a safe parking area"
+  "e": "Turn on emergency flashers and pull off the road completely into a safe parking area",
+  "g": 91
  },
  {
   "n": 92,
@@ -1518,7 +1542,8 @@ const QUESTIONS = [
    "Steer in the opposite direction",
    "Accelerate"
   ],
-  "e": "Steer in the direction you want to go"
+  "e": "Steer in the direction you want to go",
+  "g": 95
  },
  {
   "n": 96,
@@ -1534,7 +1559,8 @@ const QUESTIONS = [
    "Underinflated tires",
    "Driving too slowly"
   ],
-  "e": "Driving too fast"
+  "e": "Driving too fast",
+  "g": 96
  },
  {
   "n": 97,
@@ -1550,7 +1576,8 @@ const QUESTIONS = [
    "During heavy snowfall",
    "On hot sunny days"
   ],
-  "e": "The first rain after a dry spell"
+  "e": "The first rain after a dry spell",
+  "g": 97
  },
  {
   "n": 98,
@@ -1598,7 +1625,8 @@ const QUESTIONS = [
    "How long to stop at a stop sign",
    "When to switch to low beams"
   ],
-  "e": "If they are following at a safe distance"
+  "e": "If they are following at a safe distance",
+  "g": 100
  },
  {
   "n": 101,
@@ -1694,7 +1722,8 @@ const QUESTIONS = [
    "Only in emergencies",
    "Only to fully licensed drivers"
   ],
-  "e": "It is not permitted"
+  "e": "It is not permitted",
+  "g": 40
  },
  {
   "n": 107,
@@ -1710,7 +1739,8 @@ const QUESTIONS = [
    "Driving without headlights",
    "Driving with dim headlights"
   ],
-  "e": "You cannot stop within the distance that you can see"
+  "e": "You cannot stop within the distance that you can see",
+  "g": 18
  },
  {
   "n": 108,
@@ -1726,7 +1756,8 @@ const QUESTIONS = [
    "1 year",
    "7 days"
   ],
-  "e": "90 days"
+  "e": "90 days",
+  "g": 39
  },
  {
   "n": 109,
@@ -1758,7 +1789,8 @@ const QUESTIONS = [
    "60 days",
    "90 days"
   ],
-  "e": "30 days"
+  "e": "30 days",
+  "g": 110
  },
  {
   "n": 111,
@@ -1790,7 +1822,8 @@ const QUESTIONS = [
    "Stop at the end of the exit lane and wait for a gap",
    "Stay in your lane and move to the exit at the last moment"
   ],
-  "e": "Signal, move into the deceleration lane, reduce speed gradually and obey exit signs"
+  "e": "Signal, move into the deceleration lane, reduce speed gradually and obey exit signs",
+  "g": 59
  },
  {
   "n": 113,
@@ -1854,7 +1887,8 @@ const QUESTIONS = [
    "Accelerate to get across the icy patch quickly",
    "Turn the steering wheel sharply toward the shoulder"
   ],
-  "e": "Calmly remove your foot from the accelerator and steer in the direction you want to go"
+  "e": "Calmly remove your foot from the accelerator and steer in the direction you want to go",
+  "g": 95
  },
  {
   "n": 117,
@@ -1950,7 +1984,8 @@ const QUESTIONS = [
    "3 days",
    "1 year"
   ],
-  "e": "90 days"
+  "e": "90 days",
+  "g": 39
  },
  {
   "n": 123,
@@ -1982,7 +2017,8 @@ const QUESTIONS = [
    "60 km/h",
    "80 km/h"
   ],
-  "e": "50 km/h"
+  "e": "50 km/h",
+  "g": 14
  },
  {
   "n": 125,
@@ -2022,7 +2058,26 @@ const QUESTIONS = [
   "v": [
    "Which of these does NOT cause skids?",
    "Which of the following is not a cause of skidding?",
-   "Skids are caused by many things. Which of these is not one of them?"
+   {
+    "q": "Which of the following can cause a skid?",
+    "a": "Turning too sharply",
+    "w": [
+     "Driving too slowly",
+     "Accelerating gently",
+     "Keeping a two-second following distance"
+    ],
+    "e": "Skids are caused by driving too fast, braking too hard or turning too sharply. Driving too slowly does not cause skids."
+   },
+   {
+    "q": "Which of these driving habits can make your vehicle skid?",
+    "a": "Braking too hard",
+    "w": [
+     "Driving too slowly",
+     "Steering smoothly",
+     "Slowing down before curves"
+    ],
+    "e": "Skids are caused by driving too fast, braking too hard or turning too sharply. Driving too slowly does not cause skids."
+   }
   ],
   "a": "Driving too slowly",
   "w": [
@@ -2030,7 +2085,8 @@ const QUESTIONS = [
    "Braking too hard",
    "Turning too sharply"
   ],
-  "e": "Driving too slowly"
+  "e": "Driving too slowly",
+  "g": 96
  },
  {
   "n": 128,
@@ -2078,7 +2134,8 @@ const QUESTIONS = [
    "Within 48 hours",
    "Within 7 days"
   ],
-  "e": "Immediately"
+  "e": "Immediately",
+  "g": 12
  },
  {
   "n": 131,
@@ -2094,7 +2151,8 @@ const QUESTIONS = [
    "The signal is broken",
    "Proceed only if turning right"
   ],
-  "e": "Warns you to drive with caution"
+  "e": "Warns you to drive with caution",
+  "g": 15
  },
  {
   "n": 132,
@@ -2110,7 +2168,8 @@ const QUESTIONS = [
    "Luggage",
    "Firearms"
   ],
-  "e": "Persons"
+  "e": "Persons",
+  "g": 8
  },
  {
   "n": 133,
@@ -2142,7 +2201,8 @@ const QUESTIONS = [
    "Yes, without stopping if the way is clear",
    "Only at night"
   ],
-  "e": "Only after the vehicle has come to a complete stop yielding right of way."
+  "e": "Only after the vehicle has come to a complete stop yielding right of way.",
+  "g": 44
  },
  {
   "n": 135,
@@ -2158,7 +2218,8 @@ const QUESTIONS = [
    "At least 10 m behind the rear-most door of the streetcar",
    "Beside the front door, where the operator can see you"
   ],
-  "e": "2 meters from the rear-most door at which the passengers are getting on or off"
+  "e": "2 meters from the rear-most door at which the passengers are getting on or off",
+  "g": 30
  },
  {
   "n": 136,
@@ -2206,7 +2267,8 @@ const QUESTIONS = [
    "You must turn left",
    "Your lane ends ahead"
   ],
-  "e": "It is unsafe to pass"
+  "e": "It is unsafe to pass",
+  "g": 84
  },
  {
   "n": 139,
@@ -2254,7 +2316,8 @@ const QUESTIONS = [
    "Amber",
    "Green"
   ],
-  "e": "Blue"
+  "e": "Blue",
+  "g": 49
  },
  {
   "n": 142,
@@ -2366,7 +2429,8 @@ const QUESTIONS = [
    "One car length to the other vehicle",
    "A half second gap to the other vehicle"
   ],
-  "e": "A two second gap to the other vehicle"
+  "e": "A two second gap to the other vehicle",
+  "g": 100
  },
  {
   "n": 149,
@@ -2398,7 +2462,8 @@ const QUESTIONS = [
    "Parking lights only",
    "Hazard lights only"
   ],
-  "e": "low beam"
+  "e": "low beam",
+  "g": 3
  },
  {
   "n": 151,
@@ -2446,7 +2511,8 @@ const QUESTIONS = [
    "The light will soon turn green",
    "Yield only to pedestrians"
   ],
-  "e": "You must come to a complete stop and move through the intersection only when it is safe to do so"
+  "e": "You must come to a complete stop and move through the intersection only when it is safe to do so",
+  "g": 47
  },
  {
   "n": 154,
@@ -2478,7 +2544,8 @@ const QUESTIONS = [
    "Speed up to merge ahead of the other traffic",
    "Proceed without slowing; other traffic must yield to you"
   ],
-  "e": "Slow down, stop if necessary and proceed only when the way is clear"
+  "e": "Slow down, stop if necessary and proceed only when the way is clear",
+  "g": 26
  },
  {
   "n": 156,
@@ -2574,7 +2641,8 @@ const QUESTIONS = [
    "Within 100 m",
    "Within 150 m"
   ],
-  "e": "Within 60 m"
+  "e": "Within 60 m",
+  "g": 7
  },
  {
   "n": 162,
@@ -2590,7 +2658,8 @@ const QUESTIONS = [
    "Your lane is ending",
    "You may pass only on the right"
   ],
-  "e": "You may pass if the way is clear"
+  "e": "You may pass if the way is clear",
+  "g": 80
  },
  {
   "n": 163,
@@ -2622,7 +2691,8 @@ const QUESTIONS = [
    "Adjusting your mirrors once before driving",
    "Asking your passengers"
   ],
-  "e": "Turning you head and doing shoulder checks"
+  "e": "Turning you head and doing shoulder checks",
+  "g": 64
  },
  {
   "n": 165,
@@ -2702,7 +2772,8 @@ const QUESTIONS = [
    "Peripheral zone",
    "Safety cushion"
   ],
-  "e": "Blind spot"
+  "e": "Blind spot",
+  "g": 64
  },
  {
   "n": 170,
@@ -2894,7 +2965,8 @@ const QUESTIONS = [
    "Stop in your lane and wait for the fog to lift",
    "Speed up so you spend less time in the dense fog"
   ],
-  "e": "Turn on the emergency flashers and pull off the road completely into a safe parking area"
+  "e": "Turn on the emergency flashers and pull off the road completely into a safe parking area",
+  "g": 91
  },
  {
   "n": 182,
@@ -2902,7 +2974,26 @@ const QUESTIONS = [
   "v": [
    "Which of these statements about driving in the rain is false?",
    "Which statement about wet-weather driving is NOT true?",
-   "Identify the false statement about driving in rain."
+   {
+    "q": "Which statement about driving in the rain is true?",
+    "a": "Rain increases stopping distance",
+    "w": [
+     "Rain can increase your braking ability",
+     "Roads are least slippery when rain first begins",
+     "Rain improves visibility"
+    ],
+    "e": "Rain reduces visibility and increases stopping distance, and roads are most slippery when rain first begins. Rain never improves your braking."
+   },
+   {
+    "q": "Which of these is true about wet-weather driving?",
+    "a": "Rain reduces visibility",
+    "w": [
+     "Rain can increase your braking ability",
+     "Rain shortens stopping distance",
+     "Roads are least slippery when rain first begins"
+    ],
+    "e": "Rain reduces visibility and increases stopping distance, and roads are most slippery when rain first begins. Rain never improves your braking."
+   }
   ],
   "a": "Rain can increase your braking ability",
   "w": [
@@ -2910,7 +3001,8 @@ const QUESTIONS = [
    "Roads are most slippery when rain begins",
    "Rain increases stopping distance"
   ],
-  "e": "Rain can increase your braking ability"
+  "e": "Rain can increase your braking ability",
+  "g": 97
  },
  {
   "n": 183,
@@ -3134,7 +3226,8 @@ const QUESTIONS = [
    "60 days",
    "90 days"
   ],
-  "e": "30 days"
+  "e": "30 days",
+  "g": 110
  },
  {
   "n": 197,

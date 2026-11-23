@@ -219,19 +219,33 @@ $("reset-stats").onclick = () => {
 };
 
 // --- quiz ----------------------------------------------------------------------------
-let test = null; // { mode, items: [{ q, options, pick }], idx }
+let test = null; // { mode, items: [{ base, q, options, pick }], idx }
+
+// One wording per question: the original or a paraphrase. A paraphrase object (a positive
+// version of a negative question) brings its own answer, wrong options and explanation.
+function phrase(base) {
+  const v = shuffle([base.q, ...(base.v || [])])[0];
+  return typeof v === "string" ? { ...base, q: v } : { ...base, ...v };
+}
+
+// Near-duplicate questions share a group "g"; a test takes at most one from each group.
+function oneOfEach(list) {
+  const seen = new Set();
+  return list.filter((q) => {
+    const g = q.g ?? q.n;
+    return !seen.has(g) && seen.add(g);
+  });
+}
 
 function startTest(questions) {
   const mode = document.querySelector("input[name=mode]:checked").value;
   test = {
     mode,
     idx: 0,
-    items: shuffle(questions).map((q) => ({
-      q,
-      text: shuffle([q.q, ...(q.v || [])])[0], // original or one of its paraphrases
-      options: shuffle([q.a, ...q.w]),
-      pick: null,
-    })),
+    items: shuffle(questions).map((base) => {
+      const q = phrase(base);
+      return { base, q, options: shuffle([q.a, ...q.w]), pick: null };
+    }),
   };
   show("quiz");
   renderQuestion();
@@ -249,7 +263,7 @@ $("start").onclick = () => {
     return;
   }
   store.set("g1-settings", { from, to, count, mode: document.querySelector("input[name=mode]:checked").value });
-  startTest(shuffle(list).slice(0, count));
+  startTest(oneOfEach(shuffle(list)).slice(0, count));
 };
 
 function renderQuestion() {
@@ -260,7 +274,7 @@ function renderQuestion() {
   const answered = test.items.filter((i) => i.pick !== null);
   $("live-score").textContent = test.mode === "practice" && answered.length
     ? `${answered.filter((i) => i.pick === i.q.a).length}/${answered.length} correct` : "";
-  $("question").textContent = item.text;
+  $("question").textContent = item.q.q;
   $("options").innerHTML = item.options.map((o, i) =>
     `<button class="opt" data-i="${i}"><span class="key">${KEYS[i]}</span><span>${esc(o)}</span></button>`
   ).join("");
@@ -334,12 +348,12 @@ function finish() {
   $("review-title").textContent = wrong.length ? `Review: ${wrong.length} missed` : "Perfect score, nothing to review";
   $("review").innerHTML = wrong.map((i) => `
     <div class="review-item">
-      <div class="q"><span class="tag">#${i.q.n}</span>${esc(i.text)}</div>
+      <div class="q"><span class="tag">#${i.q.n}</span>${esc(i.q.q)}</div>
       <div class="ans-bad">Your answer: ${esc(i.pick)}</div>
       <div class="ans-good">Correct: ${esc(i.q.a)}</div>
       ${i.q.e !== i.q.a ? `<div class="hint">${esc(i.q.e)}</div>` : ""}
     </div>`).join("");
-  test.wrong = wrong.map((i) => i.q);
+  test.wrong = wrong.map((i) => i.base);
   show("results");
 }
 
