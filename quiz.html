@@ -86,7 +86,10 @@
   <!-- Setup -->
   <section id="setup">
     <div class="card">
-      <h2>Question range</h2>
+      <h2>Categories</h2>
+      <div class="modes" id="cats"></div>
+
+      <h2 style="margin-top:18px">Question range</h2>
       <div class="row">
         <label>From question <input type="number" id="from" min="1" value="1"></label>
         <label>To question <input type="number" id="to" min="1" value="70"></label>
@@ -132,6 +135,7 @@
     <div class="card">
       <p class="score" id="score"></p>
       <p id="verdict"></p>
+      <p class="hint" id="by-cat"></p>
       <div class="actions">
         <button class="primary" id="retry-wrong">Retry the ones I missed</button>
         <button id="again">New test, same range</button>
@@ -187,37 +191,52 @@ function shuffle(arr) {
 function esc(s) {
   return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 }
-const byNumber = Object.fromEntries(QUESTIONS.map((q) => [q.n, q]));
-const MAX = QUESTIONS.length;
+// Questions have a global number n (answer history, duplicate groups) and a number k within their
+// category c, which is what the range and the "#" labels use.
+const CAT_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.id, c.label]));
+const label = (q) => `${CAT_LABEL[q.c]} #${q.k}`;
 
 // --- setup ---------------------------------------------------------------------------
 const saved = store.get("g1-settings", {});
+const savedCats = (saved.cats || []).filter((c) => c in CAT_LABEL);
+$("cats").innerHTML = CATEGORIES.map((c) => `<label><input type="checkbox" name="cat" value="${c.id}"
+  ${!savedCats.length || savedCats.includes(c.id) ? "checked" : ""}> ${esc(c.label)}
+  (${QUESTIONS.filter((q) => q.c === c.id).length})</label>`).join("");
 $("from").value = saved.from ?? 1;
-$("to").value = saved.to ?? Math.min(70, MAX);
+$("to").value = saved.to ?? 70;
 $("count").value = saved.count ?? 20;
-$("from").max = $("to").max = MAX;
 if (saved.mode) document.querySelector(`input[name=mode][value=${saved.mode}]`).checked = true;
 
+const selectedCats = () => [...document.querySelectorAll("input[name=cat]:checked")].map((b) => b.value);
+const inCats = () => QUESTIONS.filter((q) => selectedCats().includes(q.c));
+
 function readRange() {
-  const from = Math.max(1, Math.min(MAX, parseInt($("from").value) || 1));
-  const to = Math.max(1, Math.min(MAX, parseInt($("to").value) || MAX));
+  const max = Math.max(1, ...inCats().map((q) => q.k));
+  const from = Math.max(1, Math.min(max, parseInt($("from").value) || 1));
+  const to = Math.max(1, Math.min(max, parseInt($("to").value) || max));
   return [Math.min(from, to), Math.max(from, to)];
 }
-function pool() {
+function inRange() {
   const [from, to] = readRange();
-  let list = QUESTIONS.filter((q) => q.n >= from && q.n <= to);
-  if ($("weak").checked) list = list.filter((q) => missedBefore(q.n));
-  return list;
+  return inCats().filter((q) => q.k >= from && q.k <= to);
+}
+function pool() {
+  const list = inRange();
+  return $("weak").checked ? list.filter((q) => missedBefore(q.n)) : list;
 }
 function updateInfo() {
   const [from, to] = readRange();
-  const all = QUESTIONS.filter((q) => q.n >= from && q.n <= to);
+  const all = inRange();
+  $("from").max = $("to").max = Math.max(1, ...inCats().map((q) => q.k));
   const missed = all.filter((q) => missedBefore(q.n)).length;
   const seen = all.filter((q) => stats[q.n]).length;
-  $("range-info").textContent = `${all.length} questions in range ${from}–${to} (of ${MAX} total).`;
+  const parts = selectedCats().map((c) => `${all.filter((q) => q.c === c).length} ${CAT_LABEL[c]}`);
+  $("range-info").textContent = parts.length
+    ? `${all.length} questions in range ${from}–${to} (${parts.join(", ")}). The range applies within each category.`
+    : "Pick at least one category.";
   $("weak-info").textContent = `You've answered ${seen} of these before and got ${missed} wrong at least once.`;
 }
-["from", "to", "weak"].forEach((id) => $(id).addEventListener("input", updateInfo));
+["from", "to", "weak", "cats"].forEach((id) => $(id).addEventListener("input", updateInfo));
 updateInfo();
 api("/api/stats")
   .then((s) => { stats = s; updateInfo(); })
@@ -273,12 +292,14 @@ $("start").onclick = () => {
   const count = Math.max(1, parseInt($("count").value) || 20);
   $("setup-error").textContent = "";
   if (!list.length) {
-    $("setup-error").textContent = $("weak").checked
-      ? "You haven't missed any questions in this range yet. Untick the focus option."
+    $("setup-error").textContent = !selectedCats().length ? "Pick at least one category."
+      : $("weak").checked ? "You haven't missed any questions in this range yet. Untick the focus option."
       : "No questions in that range.";
     return;
   }
-  store.set("g1-settings", { from, to, count, mode: document.querySelector("input[name=mode]:checked").value });
+  store.set("g1-settings", {
+    cats: selectedCats(), from, to, count, mode: document.querySelector("input[name=mode]:checked").value,
+  });
   startTest(oneOfEach(shuffle(list)).slice(0, count));
 };
 
@@ -319,7 +340,7 @@ function choose(i) {
     });
     $("feedback").innerHTML = `<div class="feedback ${ok ? "good" : "bad"}">
       <b>${ok ? "Correct" : "Not quite"}</b>${esc(item.q.e)}
-      <div class="hint">Question #${item.q.n} in your study list</div></div>`;
+      <div class="hint">${esc(label(item.q))} in your study list</div></div>`;
   }
 }
 
@@ -360,11 +381,16 @@ function finish() {
   $("verdict").innerHTML = pct >= PASS
     ? `<span class="pass">Pass</span>: you need ${Math.ceil(PASS * total)} of ${total} (80%) to pass.`
     : `<span class="fail">Not yet</span>: you need ${Math.ceil(PASS * total)} of ${total} (80%) to pass.`;
+  const cats = CATEGORIES.map((c) => c.id).filter((c) => test.items.some((i) => i.q.c === c));
+  $("by-cat").textContent = cats.length < 2 ? "" : cats.map((c) => {
+    const items = test.items.filter((i) => i.q.c === c);
+    return `${CAT_LABEL[c]}: ${items.filter((i) => i.pick === i.q.a).length}/${items.length}`;
+  }).join(" · ");
   $("retry-wrong").hidden = !wrong.length;
   $("review-title").textContent = wrong.length ? `Review: ${wrong.length} missed` : "Perfect score, nothing to review";
   $("review").innerHTML = wrong.map((i) => `
     <div class="review-item">
-      <div class="q"><span class="tag">#${i.q.n}</span>${esc(i.q.q)}</div>
+      <div class="q"><span class="tag">${esc(label(i.q))}</span>${esc(i.q.q)}</div>
       <div class="ans-bad">Your answer: ${esc(i.pick)}</div>
       <div class="ans-good">Correct: ${esc(i.q.a)}</div>
       ${i.q.e !== i.q.a ? `<div class="hint">${esc(i.q.e)}</div>` : ""}
